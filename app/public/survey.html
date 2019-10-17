@@ -10,6 +10,8 @@
     <link rel="stylesheet" type="text/css"
         href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../assets/css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -125,7 +127,8 @@
             </div>
             <div class="form-group">
                 <h5>Question 9</h5>
-                <label for="question9">You feel just as comfortable with a group of friends as you would with one friend.</label>
+                <label for="question9">You feel just as comfortable with a group of friends as you would with one
+                    friend.</label>
                 <select class="form-control" id="question9">
                     <option value="" hidden>Select an Option</option>
                     <option value="1">1 (Strongly Disagree)</option>
@@ -137,7 +140,8 @@
             </div>
             <div class="form-group">
                 <h5>Question 10</h5>
-                <label for="question10">You prefer contrast in your friend's tastes and ideas rather than shared interests.</label>
+                <label for="question10">You prefer contrast in your friend's tastes and ideas rather than shared
+                    interests.</label>
                 <select class="form-control" id="question10">
                     <option value="" hidden>Select an Option</option>
                     <option value="1">1 (Strongly Disagree)</option>
@@ -148,7 +152,7 @@
                 </select>
             </div>
             <br>
-            <button type="submit" class="btn btn-outline-success btn-lg">Submit</button>
+            <button type="submit" class="btn btn-outline-success btn-lg" id="submitBtn">Submit</button>
         </form>
         <hr class="my-4">
         <div id="friendModal" class="modal fade" role="dialog">
@@ -177,5 +181,53 @@
         </div>
     </footer>
 </body>
+
+
+<script type="text/javascript">
+
+    $("#submitBtn").on("click", function (event) {
+
+        event.preventDefault();
+
+        var valid = true;
+
+        if ($("#name").val().trim() === "" || $("#photo").val().trim() === "") {
+            valid = false;
+            alert("Please enter a valid name and photo");
+        } else if ($("#question1").val() === "" || $("#question2").val() === "" || $("#question3").val() === "" || $("#question4").val() === "" || $("#question5").val() === "" || $("#question6").val() === "" || $("#question7").val() === "" || $("#question8").val() === "" || $("#question9").val() === "" || $("#question10").val() === "") {
+            valid = false;
+            alert("Please answer all questions");
+        }
+        if (valid) {
+            var newUser = {
+                name: $("#name").val().trim(),
+                photo: $("#photo").val().trim(),
+                scores: [
+                    parseInt($("#question1").val()),
+                    $("#question2").val(),
+                    $("#question3").val(),
+                    $("#question4").val(),
+                    $("#question5").val(),
+                    $("#question6").val(),
+                    $("#question7").val(),
+                    $("#question8").val(),
+                    $("#question9").val(),
+                    $("#question10").val()
+                ]
+            };
+
+            console.log(newUser);
+
+            var currentURL = window.location.origin;
+
+            $.post(currentURL + "/api/friends", newUser, function (data) {
+                $("#newFriend").text(data.name);
+                $("#newFriendPic").attr("src", data.photo);
+                $("#friendModal").modal("toggle");
+            });
+
+        } else (alert("Survey is incomplete!"));
+    });
+</script>
 
 </html>
