@@ -8,6 +8,7 @@ var PORT = process.env.PORT || 4440;
 // Data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static('./app/public'));
 
 // Routes
 require("./app/routing/apiRoutes")(app);
